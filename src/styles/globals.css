@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark {
+    --sidebar: 225 6% 13%;
+
+    --sidebar-2: 220 7% 18%;
+    --sidebar-2-fg: 0 0% 100%;
+    --sidebar-2-muted: 214 8% 61%;
+    --sidebar-2-hover: 228 6% 33%;
+
+    --bg: 223 7% 21%;
+    --bg-alt: 220 7% 17%;
+    --fg: 210 9% 87%;
+    --muted: 214 8% 61%;
+
+    --card: 222 6.67% 20.59%;
+    --card-fg: 222 13.04% 95.49%;
+
+    --tooltip: 225 8% 10%;
+    --tooltip-fg: 210 3% 87%;
+
+    --popover: 220 8% 7%;
+    --popover-fg: 215 9% 73%;
+
+    --brand: 234.94 85.56% 64.71%;
+    --brand-fg: 0 0% 100%;
+
+    --primary: 235 86% 65%;
+    --primary-fg: 0 0% 100%;
+
+    --secondary: 217 8% 34%;
+    --secondary-fg: 0 0% 100%;
+
+    --radius: 0.5rem;
+    --border: 228 6% 33%;
+    --ring: 213.25 73.71% 41.76%;
+    --input: 225 7% 24%;
+  }
+
+  em-emoji-picker {
+    --rgb-background: 16, 17, 19;
+    --sidebar-width: 14px;
+    --rgb-color: 221, 222, 223;
+    --rgb-accent: 85, 101, 241;
+    --font-family: var(--font-sans);
+    width: 100%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-bg text-fg;
+  }
+
+  html,
+  body,
+  #__next {
+    @apply h-full;
+  }
+
+  .ram {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-[14px] h-[14px];
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-popover/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+  }
+
+  @media only screen and (max-width: 441px) {
+    .ram {
+      grid-template-columns: 1fr;
+    }
+  }
+}
