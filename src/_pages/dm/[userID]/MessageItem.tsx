@@ -137,7 +137,7 @@ export const MessageItem = forwardRef<
               <div>
                 <p className="[overflow-wrap:anywhere]">{message.content}</p>
                 {message.reactions ? (
-                  <div className="mt-1 flex gap-3 items-center">
+                  <div className="mt-1 flex flex-wrap gap-3 items-center mt-2">
                     {Object.entries(message.reactions).map(
                       ([reaction, userIDs]) => {
                         return (
@@ -148,7 +148,7 @@ export const MessageItem = forwardRef<
                                   e.stopPropagation()
                                   handleReaction(reaction)
                                 }}
-                                className="py-[1px] px-2 rounded-lg border border-brand bg-brand/10 flex flex-wrap items-center justify-center disabled:pointer-events-none disabled:opacity-50 gap-x-1"
+                                className="py-[1px] px-2 rounded-lg border border-brand bg-brand/10 flex items-center justify-center disabled:pointer-events-none disabled:opacity-50 gap-x-1"
                               >
                                 <span>{reaction}</span>
                                 <span>{userIDs.length}</span>
