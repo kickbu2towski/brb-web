@@ -19,11 +19,12 @@ export function Layout(props: Props) {
   const onMessage = useCallback(
     (e: MessageEvent) => {
       try {
-        const event = JSON.parse(e.data) as DMEvent & { event: 'DMEvent' }
-        if (event.event === 'DMEvent') {
-          mutate({ event })
+        const { data } = JSON.parse(e.data) as { data: DMEvent }
+        if (data.event === 'DMEvent') {
+          mutate({ event: data })
         }
-      } catch (err) {}
+      } catch (err) {
+      }
     },
     [mutate]
   )

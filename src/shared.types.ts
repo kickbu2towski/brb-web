@@ -15,7 +15,7 @@ export type UnreadCount = {
   [key: string]: number
 }
 
-export type PayloadMessage = {
+export type Message = {
   id: string
   content: string
   dm_id: number
@@ -26,6 +26,8 @@ export type PayloadMessage = {
   reply_to_id?: string
   reactions?: Reactions
 }
+
+type PayloadMessage = Omit<Message, 'user'>
 
 type Reactions = {
   [key: string]: string[]
@@ -40,7 +42,8 @@ export type PayloadEdit = {
 export type PayloadReaction = {
   id: string
   dm_id: number
-  reactions: string
+  reaction: string
+  toRemove: boolean
 }
 
 export type PayloadDelete = {
@@ -64,5 +67,8 @@ export type DMEvent = (
   | {
       type: 'Reaction'
       payload: PayloadReaction
-    }
-) & { broadcastTo: string[] }
+    } | {
+      type: 'Publish'
+      payload: Message
+  }
+) & { broadcastTo: string[]; user_id: string; event: 'DMEvent' }

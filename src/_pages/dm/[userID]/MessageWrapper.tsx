@@ -11,7 +11,7 @@ import {
 import { useMatchMedia } from '@/hooks'
 import { Drawer } from 'vaul'
 import {
-  PayloadMessage,
+  Message,
   DMEvent,
   PayloadEdit,
   UserIdentity,
@@ -24,8 +24,8 @@ import { useAtom } from 'jotai'
 import { wsConnAtom } from '@/lib/ws'
 
 export type Props = {
-  message: PayloadMessage
-  replyToMessage: PayloadMessage | undefined
+  message: Message
+  replyToMessage: Message | undefined
   isEditing: boolean
   isReplying: boolean
   setReplyTo: React.Dispatch<React.SetStateAction<string>>
@@ -48,6 +48,7 @@ export function MessageWrapper(props: Props) {
   function handleDelete(id: string) {
     const event: DMEvent & { event: 'DMEvent' } = {
       type: 'Delete',
+      user_id: sender.id,
       payload: {
         id,
         dm_id: message.dm_id,
@@ -72,6 +73,7 @@ export function MessageWrapper(props: Props) {
     setEditing('')
 
     const event: DMEvent & { event: 'DMEvent' } = {
+      user_id: sender.id,
       payload,
       type: 'Edit',
       broadcastTo: [sender.id, receiver.id],
@@ -84,28 +86,18 @@ export function MessageWrapper(props: Props) {
   function handleReaction(reaction: string) {
     const reactions = message.reactions ?? {}
     let existing = reactions[reaction] ?? []
-
-    const toRemove = existing.findIndex((id) => id === sender.id)
-    if (toRemove !== -1) {
-      existing = existing.filter((id) => id !== sender.id)
-    } else {
-      existing = [...existing, sender.id]
-    }
-    reactions[reaction] = existing
-
-    if (!existing.length) {
-      delete reactions[reaction]
-    }
-
-    const event: DMEvent & { event: 'DMEvent' } = {
+    const toRemove = existing.findIndex((id) => id === sender.id) !== -1
+    const event: DMEvent = {
+      user_id: sender.id,
       payload: {
         id: message.id,
-        reactions: JSON.stringify(reactions),
+        reaction: reaction,
         dm_id: message.dm_id,
+        toRemove,
       },
+      event: 'DMEvent',
       type: 'Reaction',
       broadcastTo: [sender.id, receiver.id],
-      event: 'DMEvent',
     }
     wsConn?.send(JSON.stringify(event))
   }

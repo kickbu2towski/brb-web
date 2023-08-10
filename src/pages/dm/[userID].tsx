@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Input } from '@/components/ui/input'
 import { DMEvent, User } from '@/shared.types'
 import { AvatarWrapper } from '@/components/AvatarWrapper'
-import { PayloadMessage } from '@/shared.types'
+import { Message } from '@/shared.types'
 import { MessageWrapper } from '@/_pages/dm/[userID]'
 import { twMerge } from 'tailwind-merge'
 import clsx from 'clsx'
@@ -146,7 +146,7 @@ const DM: NextPageWithLayout = () => {
                   e.preventDefault()
                   const date = new Date()
 
-                  const payload: PayloadMessage = {
+                  const payload: Message = {
                     dm_id: dmID,
                     id: crypto.randomUUID(),
                     user: {
@@ -165,7 +165,8 @@ const DM: NextPageWithLayout = () => {
                   inputRef.current.value = ''
                   setReplyTo('')
 
-                  const event: DMEvent & { event: 'DMEvent' } = {
+                  const event: DMEvent = {
+                    user_id: me.id,
                     payload,
                     type: 'Create',
                     broadcastTo: [me.id, receiver.id],
