@@ -148,7 +148,7 @@ export const MessageItem = forwardRef<
                                   e.stopPropagation()
                                   handleReaction(reaction)
                                 }}
-                                className="py-[1px] px-2 rounded-lg border border-brand bg-brand/10 flex items-center justify-center disabled:pointer-events-none disabled:opacity-50 gap-x-1"
+                                className="py-[1px] px-2 rounded-lg border border-brand bg-brand/10 flex flex-wrap items-center justify-center disabled:pointer-events-none disabled:opacity-50 gap-x-1"
                               >
                                 <span>{reaction}</span>
                                 <span>{userIDs.length}</span>

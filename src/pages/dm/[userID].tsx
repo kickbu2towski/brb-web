@@ -148,7 +148,11 @@ const DM: NextPageWithLayout = () => {
                   const payload: PayloadMessage = {
                     dm_id: dmID,
                     id: crypto.randomUUID(),
-                    user: me,
+                    user: {
+                      id: me.id,
+                      avatar: me.avatar,
+                      username: me.username,
+                    },
                     content: e.currentTarget.value,
                     created_at: date.toISOString(),
                   }
