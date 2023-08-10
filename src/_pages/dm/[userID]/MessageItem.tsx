@@ -135,7 +135,7 @@ export const MessageItem = forwardRef<
               <p className="text-muted italic">This message is deleted</p>
             ) : (
               <div>
-                <p>{message.content}</p>
+                <p className="[overflow-wrap:anywhere]">{message.content}</p>
                 {message.reactions ? (
                   <div className="mt-1 flex gap-3 items-center">
                     {Object.entries(message.reactions).map(

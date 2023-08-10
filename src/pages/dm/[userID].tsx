@@ -140,6 +140,7 @@ const DM: NextPageWithLayout = () => {
                 if (
                   e.key === 'Enter' &&
                   inputRef.current &&
+                  inputRef.current.value.trim().length &&
                   dmID !== undefined
                 ) {
                   e.preventDefault()
@@ -153,7 +154,7 @@ const DM: NextPageWithLayout = () => {
                       avatar: me.avatar,
                       username: me.username,
                     },
-                    content: e.currentTarget.value,
+                    content: e.currentTarget.value.trim(),
                     created_at: date.toISOString(),
                   }
 
