@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { DMEvent, Message, User, UserIdentity } from '@/shared.types'
+import { PublisEvent, Message, User, UserIdentity } from '@/shared.types'
 import { mutateUnreadCountAtom } from '@/lib/store'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 
 type Data = {
-  event: DMEvent
+  event: PublisEvent
 }
 
 export function useWSEvent() {
@@ -18,9 +18,9 @@ export function useWSEvent() {
       return new Promise((resolve) => resolve(data))
     },
     onSuccess(data) {
-      const { type, payload } = data.event
-      switch (type) {
-        case 'Publish': {
+      const { name, payload } = data.event
+      switch (name) {
+        case 'PublishEvent': {
           const { dm_id } = payload
           queryClient.setQueriesData(['messages', dm_id], (data: unknown) => {
             let updatedData = [...(data as Message[])]

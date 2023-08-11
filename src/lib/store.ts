@@ -9,7 +9,7 @@ export const totalUnreadCountAtom = atom((get) =>
 
 export const mutateUnreadCountAtom = atom(
   () => '',
-  (get, set, userID: string, toRemove: boolean) => {
+  (get, set, userID: number, toRemove: boolean) => {
     set(
       unreadCountAtom,
       mutateUnreadCount(get(unreadCountAtom), userID, toRemove)
@@ -19,7 +19,7 @@ export const mutateUnreadCountAtom = atom(
 
 function mutateUnreadCount(
   unreadCount: UnreadCount,
-  userID: string,
+  userID: number,
   toRemove: boolean
 ) {
   const update = { ...unreadCount }

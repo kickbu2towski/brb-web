@@ -2,7 +2,7 @@ import { fetchWrapper } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 
 export type UserResult = {
-  id: string
+  id: number
   username: string
   avatar: string
   followers_count: number

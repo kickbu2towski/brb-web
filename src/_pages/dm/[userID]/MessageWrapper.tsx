@@ -46,7 +46,7 @@ export function MessageWrapper(props: Props) {
   const [emojiOpen, setEmojiOpen] = useState(false)
 
   function handleDelete(id: string) {
-    const event: DMEvent & { event: 'DMEvent' } = {
+    const event: DMEvent = {
       type: 'Delete',
       user_id: sender.id,
       payload: {
@@ -54,7 +54,7 @@ export function MessageWrapper(props: Props) {
         dm_id: message.dm_id,
       },
       broadcastTo: [sender.id, receiver.id],
-      event: 'DMEvent',
+      name: 'DMEvent',
     }
     wsConn?.send(JSON.stringify(event))
   }
@@ -72,12 +72,12 @@ export function MessageWrapper(props: Props) {
     inputRef.current.value = ''
     setEditing('')
 
-    const event: DMEvent & { event: 'DMEvent' } = {
+    const event: DMEvent = {
       user_id: sender.id,
       payload,
       type: 'Edit',
       broadcastTo: [sender.id, receiver.id],
-      event: 'DMEvent',
+      name: 'DMEvent',
     }
 
     wsConn?.send(JSON.stringify(event))
@@ -95,7 +95,7 @@ export function MessageWrapper(props: Props) {
         dm_id: message.dm_id,
         toRemove,
       },
-      event: 'DMEvent',
+      name: 'DMEvent',
       type: 'Reaction',
       broadcastTo: [sender.id, receiver.id],
     }

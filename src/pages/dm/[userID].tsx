@@ -27,11 +27,11 @@ const DM: NextPageWithLayout = () => {
   const [wsConn] = useAtom(wsConnAtom)
   const queryClient = useQueryClient()
   const router = useRouter()
-  const userID = router.query.userID
+  const userID = typeof router.query.userID === "string" ? parseInt(router.query.userID) : undefined
   const [, mutateUnreadCount] = useAtom(mutateUnreadCountAtom)
-  const { isSuccess, data: receiver } = useUser(userID as string)
+  const { isSuccess, data: receiver } = useUser(userID as number)
   const me = queryClient.getQueryData(['me']) as User
-  const { data: dmID } = useDM([me?.id, receiver?.id as string])
+  const { data: dmID } = useDM([me?.id, receiver?.id as number])
   const { data: messages } = useMessages(dmID as number)
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -63,8 +63,8 @@ const DM: NextPageWithLayout = () => {
   }, [highlight])
 
   useEffect(() => {
-    if (userID) {
-      mutateUnreadCount(userID as string, true)
+    if (typeof userID === "number") {
+      mutateUnreadCount(userID, true)
     }
   }, [userID, mutateUnreadCount])
 
@@ -170,7 +170,7 @@ const DM: NextPageWithLayout = () => {
                     payload,
                     type: 'Create',
                     broadcastTo: [me.id, receiver.id],
-                    event: 'DMEvent',
+                    name: 'DMEvent',
                   }
 
                   wsConn?.send(JSON.stringify(event))

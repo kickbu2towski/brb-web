@@ -3,7 +3,7 @@ import { Sidebar } from '@/components/Sidebar'
 import clsx from 'clsx'
 import { inter } from '@/lib/fonts'
 import { useWSEvent } from '@/hooks'
-import { DMEvent } from '@/shared.types'
+import { PublisEvent } from '@/shared.types'
 import { useAtom } from 'jotai'
 import { wsConnAtom } from '@/lib/ws'
 
@@ -19,8 +19,8 @@ export function Layout(props: Props) {
   const onMessage = useCallback(
     (e: MessageEvent) => {
       try {
-        const { data } = JSON.parse(e.data) as { data: DMEvent }
-        if (data.event === 'DMEvent') {
+        const { data } = JSON.parse(e.data) as { data: PublisEvent }
+        if (data.name === 'PublishEvent') {
           mutate({ event: data })
         }
       } catch (err) {

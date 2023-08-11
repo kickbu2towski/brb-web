@@ -1,8 +1,6 @@
 export type User = {
-  id: string
+  id: number
   username: string
-  email: string
-  email_verified: boolean
   avatar: string
   bio: string
 }
@@ -30,7 +28,7 @@ export type Message = {
 type PayloadMessage = Omit<Message, 'user'>
 
 type Reactions = {
-  [key: string]: string[]
+  [key: string]: number[]
 }
 
 export type PayloadEdit = {
@@ -51,6 +49,11 @@ export type PayloadDelete = {
   dm_id: number
 }
 
+export type PublisEvent = {
+  name: "PublishEvent"
+  payload: Message
+}
+
 export type DMEvent = (
   | {
       type: 'Create'
@@ -67,8 +70,5 @@ export type DMEvent = (
   | {
       type: 'Reaction'
       payload: PayloadReaction
-    } | {
-      type: 'Publish'
-      payload: Message
-  }
-) & { broadcastTo: string[]; user_id: string; event: 'DMEvent' }
+    }
+) & { broadcastTo: number[]; user_id: number; name: 'DMEvent' }

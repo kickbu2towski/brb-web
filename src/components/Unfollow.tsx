@@ -14,7 +14,7 @@ import { useUnfollow } from '@/hooks'
 
 type Props = {
   children: ReactNode
-  userID: string
+  userID: number
   queryKey: string[]
 }
 
