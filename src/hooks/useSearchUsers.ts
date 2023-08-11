@@ -7,7 +7,9 @@ export type UserResult = {
   avatar: string
   followers_count: number
   following_count: number
+  friends_count: number
   is_following: boolean
+  is_friend: boolean
 }
 
 async function searchUsers(username: string): Promise<UserResult[]> {

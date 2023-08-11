@@ -27,6 +27,7 @@ export function SearchUser(props: Props) {
           <Input
             id="search-users"
             placeholder="Mad Max"
+            autoComplete="off"
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>

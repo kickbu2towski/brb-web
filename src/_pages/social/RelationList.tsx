@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { useRelation } from '@/hooks'
 import { Relation } from '@/shared.types'
 import { AvatarWrapper } from '@/components/AvatarWrapper'
-import { MoreVertical, Mail, HeartOff } from 'lucide-react'
+import { MoreVertical, Mail, HeartOff, MailOpen } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +32,16 @@ export function RelationList(props: { relation: Relation }) {
                 <p>{user.username}</p>
               </div>
               {relation !== 'followers' && (
-                <div>
+                <div className="flex items-center gap-3">
+                  {relation === 'friends' && (
+                    <Link
+                      href={`/dm/${user.id}`}
+                      className="relative top-[7px] text-muted bg-bg shadow-sm p-2 rounded-full flex items-center justify-center hover:text-fg"
+                    >
+                      {' '}
+                      <MailOpen size={15} />{' '}
+                    </Link>
+                  )}
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       <MoreVertical className="text-muted h-5 w-5 relative top-2" />
