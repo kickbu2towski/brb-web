@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NextPageWithLayout } from './_app'
+import { NextPageWithLayout } from '../_app'
 import { DMListLayout } from '@/components/DMListLayout'
 import { RelationList, SearchUser, TabItem } from '@/_pages/social'
 import { tabs } from '@/lib/constants'

@@ -55,11 +55,11 @@ export function DMList(props: Props) {
             {users.map((user) => {
               return (
                 <Link
-                  href={`/dm/${user.id}`}
+                  href={`/social/dm/${user.id}`}
                   className={twMerge(
                     'flex items-center justify-between px-3 rounded-md hover:text-sidebar-2-fg transition duration-300 hover:bg-sidebar-2-hover/40 py-2',
                     clsx(
-                      router.asPath === `/dm/${user.id}` &&
+                      router.asPath === `/social/dm/${user.id}` &&
                         'bg-sidebar-2-hover/60 text-sidebar-2-fg'
                     )
                   )}

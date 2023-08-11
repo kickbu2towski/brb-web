@@ -35,7 +35,7 @@ export function RelationList(props: { relation: Relation }) {
                 <div className="flex items-center gap-3">
                   {relation === 'friends' && (
                     <Link
-                      href={`/dm/${user.id}`}
+                      href={`/social/dm/${user.id}`}
                       className="relative top-[7px] text-muted bg-bg shadow-sm p-2 rounded-full flex items-center justify-center hover:text-fg"
                     >
                       {' '}
@@ -53,7 +53,7 @@ export function RelationList(props: { relation: Relation }) {
                       {relation === 'friends' && (
                         <DropdownMenuItem className="px-2 flex items-center gap-3">
                           <Link
-                            href={`/dm/${user.id}`}
+                            href={`/social/dm/${user.id}`}
                             className="flex gap-3 items-center"
                           >
                             <Mail className="h-4 w-4 text-muted-foreground" />

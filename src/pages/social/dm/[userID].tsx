@@ -1,6 +1,6 @@
 import { useDM, useUser, useMessages } from '@/hooks'
 import { useRouter } from 'next/router'
-import { NextPageWithLayout } from '../_app'
+import { NextPageWithLayout } from '../../_app'
 import { DMListLayout } from '@/components/DMListLayout'
 import { useEffect, useState, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'

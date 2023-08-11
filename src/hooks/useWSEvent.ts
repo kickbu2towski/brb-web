@@ -36,7 +36,7 @@ export function useWSEvent() {
           const me = queryClient.getQueryData(['me']) as User
           if (
             payload.user.id !== me.id &&
-            router.asPath !== `/dm/${payload.user.id}`
+            router.asPath !== `/social/dm/${payload.user.id}`
           ) {
             mutateUnreadCount(payload.user.id, false)
             queryClient.setQueriesData(['dms'], (data: unknown) => {

@@ -14,6 +14,7 @@ export function useFollow() {
       followUser(userID),
     onSuccess: (_, { username }) => {
       queryClient.invalidateQueries({ queryKey: ['searchUsers', username] })
+      queryClient.invalidateQueries({ queryKey: ['dms'] })
     },
   })
 }

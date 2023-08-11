@@ -1,6 +1,5 @@
 import { UserResult, useFollow } from '@/hooks'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Card } from '@/components/ui/card'
 import { AvatarWrapper } from '@/components/AvatarWrapper'
 import { Unfollow } from '@/components/Unfollow'
@@ -31,7 +30,7 @@ export function UserCard(props: Props) {
           <p className="text-xl">{user.username}</p>
           {user.is_friend && (
             <Link
-              href={`/dm/${user.id}`}
+              href={`/social/dm/${user.id}`}
               className="text-muted bg-bg-alt p-2 rounded-full flex items-center justify-center hover:text-fg"
             >
               <MailOpen size={16} />

@@ -9,6 +9,8 @@ import { init } from 'emoji-mart'
 import { twMerge } from 'tailwind-merge'
 import { totalUnreadCountAtom } from '@/lib/store'
 import { useAtom } from 'jotai'
+import { useRouter } from 'next/router'
+import clsx from 'clsx'
 
 const links = [
   { icon: Home, text: 'Rooms', href: '/' },
@@ -25,6 +27,7 @@ export function Sidebar(props: Props) {
   const { isSuccess: emojiFetched, data: emojiData } = useEmoji()
   const { data, isSuccess } = useMe()
   const { refetch } = useRedirectURL()
+  const { asPath } = useRouter()
 
   if (emojiFetched) {
     init({ data: emojiData })
@@ -43,7 +46,7 @@ export function Sidebar(props: Props) {
           <TooltipWrapper text={link.text} key={link.href}>
             <Link
               href={link.href}
-              className="h-[48px] w-[48px] rounded-full bg-bg hover:bg-brand hover:text-fg transition flex items-center justify-center relative"
+              className={twMerge("h-[48px] w-[48px] rounded-full bg-bg hover:bg-brand hover:text-fg transition flex items-center justify-center relative", clsx(link.href === "/" ? asPath === link.href : asPath.startsWith(link.href) && "bg-brand text-fg"))}
             >
               {}
               <Icon className="w-[22px] h-[22px]" />

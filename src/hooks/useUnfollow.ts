@@ -14,6 +14,7 @@ export function useUnfollow() {
       unfollow(userID),
     onSuccess: (_, { queryKey }) => {
       queryClient.invalidateQueries({ queryKey })
+      queryClient.invalidateQueries({ queryKey: ['dms'] })
     },
   })
 }
