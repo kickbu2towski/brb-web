@@ -5,7 +5,7 @@ export default function Document() {
   return (
     <Html lang="en" className="dark">
       <Head />
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${inter.variable} font-sans bg-bg text-fg`}>
         <Main />
         <NextScript />
       </body>

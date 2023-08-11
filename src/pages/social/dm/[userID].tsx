@@ -87,7 +87,7 @@ const DM: NextPageWithLayout = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols grid-rows-[1fr_auto] overflow-auto pt-2">
+      <div className="grid v-kb grid-auto-rows overflow-auto pt-2">
         <div className="flex flex-col overflow-auto" ref={messagesRef}>
           {messages.map((message) => {
             const replyToMessage = messages.find(

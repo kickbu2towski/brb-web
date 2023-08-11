@@ -38,6 +38,12 @@ export function Layout(props: Props) {
     }
   }, [onMessage, wsConn])
 
+  useEffect(() => {
+    if ("virtualKeyboard" in navigator) {
+      (navigator.virtualKeyboard as any).overlaysContent = true
+    }
+  }, [])
+
   return (
     <div
       className={clsx(

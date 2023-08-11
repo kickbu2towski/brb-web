@@ -84,6 +84,10 @@
     background-clip: padding-box;
   }
 
+  .v-kb {
+    grid-template-rows: 1fr auto env(keyboard-inset-height, 0);
+  }
+
   @media only screen and (max-width: 441px) {
     .ram {
       grid-template-columns: 1fr;
