@@ -20,35 +20,10 @@ module.exports = {
         fg: 'hsl(var(--fg))',
         bg: {
           DEFAULT: 'hsl(var(--bg))',
-          alt: 'hsl(var(--bg-alt))',
+          '2': 'hsl(var(--bg-2))',
+          '3': 'hsl(var(--bg-3))',
         },
         muted: 'hsl(var(--muted))',
-
-        sidebar: {
-          DEFAULT: 'hsl(var(--sidebar))',
-        },
-
-        'sidebar-2': {
-          DEFAULT: 'hsl(var(--sidebar-2))',
-          fg: 'hsl(var(--sidebar-2-fg))',
-          muted: 'hsl(var(--sidebar-2-muted))',
-          hover: 'hsl(var(--sidebar-2-hover))',
-        },
-
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          fg: 'hsl(var(--card-fg))',
-        },
-
-        tooltip: {
-          DEFAULT: 'hsl(var(--tooltip))',
-          fg: 'hsl(var(--tooltip-fg))',
-        },
-
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          fg: 'hsl(var(--popover-fg))',
-        },
 
         primary: {
           DEFAULT: 'hsl(var(--primary))',
@@ -61,7 +36,6 @@ module.exports = {
         },
 
         ring: 'hsl(var(--ring))',
-
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
 
@@ -71,7 +45,9 @@ module.exports = {
         },
       },
       boxShadow: {
-        header: '0px 2px 2px 0px rgba(0, 0, 0, 0.15)',
+        'depth-1': ' 0px 6px 6px -4px rgba(0, 0, 0, 0.10)',
+        'depth-2': ' 0px 16px 16px -4px rgba(0, 0, 0, 0.10)',
+        'depth-4': ' 0px 24px 32px -16px rgba(0, 0, 0, 0.50)',
       },
       borderRadius: {
         lg: 'var(--radius)',

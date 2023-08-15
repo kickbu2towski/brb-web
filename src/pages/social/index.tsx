@@ -19,7 +19,7 @@ const Social: NextPageWithLayout = () => {
 
   return (
     <div className="bg-bg-alt grid grid-rows-[auto_1fr] overflow-auto">
-      <div className="px-4 py-3 flex shadow-md flex-col overflow-hidden">
+      <div className="px-4 py-3 flex shadow-depth-1 flex-col overflow-hidden">
         <div
           className={twMerge(
             'flex md:hidden items-center gap-3 mb-5',
@@ -45,7 +45,7 @@ const Social: NextPageWithLayout = () => {
               setSelectedTab(tabs[3])
             }}
             className={twMerge(
-              'rounded-full py-1 h-auto bg-bg-alt border-2 border-input shadow-lg md:hidden',
+              'rounded-full py-1 h-auto md:hidden',
               clsx(isInputFocussed && 'border-none shadow-none')
             )}
             onChange={(e) => setUsername(e.target.value)}
@@ -53,7 +53,7 @@ const Social: NextPageWithLayout = () => {
           />
         </div>
         {!isInputFocussed && (
-          <div className="flex [&>*]:shrink-0 gap-y-4 gap-3 overflow-x-auto pb-2">
+          <div className="flex [&>*]:shrink-0 gap-y-4 gap-3 p-1 overflow-x-auto">
             {tabs.map((tab) => (
               <TabItem
                 key={tab}

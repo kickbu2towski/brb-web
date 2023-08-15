@@ -31,8 +31,8 @@ export const AlertDialogWrapper = forwardRef((props: Props, _ref) => {
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onOk}>Continue</AlertDialogAction>
+          <AlertDialogCancel className="hover:bg-bg hover:text-fg ring-offset-bg-2">Cancel</AlertDialogCancel>
+          <AlertDialogAction className="ring-offset-bg-2" onClick={onOk}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -52,7 +52,11 @@ export function Layout(props: Props) {
       )}
     >
       <Sidebar className="hidden md:flex" />
-      {children}
+      <div className="bg-bg-2 p-4 md:pl-1 overflow-auto">
+        <div className="bg-bg h-full rounded-lg">
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

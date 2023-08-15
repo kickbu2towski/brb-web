@@ -22,17 +22,17 @@ export function DMList(props: Props) {
   return (
     <div
       className={twMerge(
-        'bg-sidebar-2 text-sidebar-2-muted w-[260px] px-2 py-4 flex flex-col',
+        'text-muted bg-bg rounded-l-lg border-r border-border/60 w-[260px] px-2 py-4 flex flex-col',
         className
       )}
     >
       <Link
         href="/social"
         className={twMerge(
-          'flex font-medium items-center gap-3 hover:bg-sidebar-2-hover/40 px-4 py-2 rounded-md mb-6 hover:text-sidebar-2-fg transition duration-300',
+          'flex font-medium items-center gap-3 hover:text-brand-fg hover:bg-brand/20 px-4 py-2 rounded-md mb-6 transition duration-300',
           clsx(
             router.asPath === '/social' &&
-              'bg-sidebar-2-hover/60 text-sidebar-2-fg'
+              'bg-brand/20 text-brand-fg'
           )
         )}
       >
@@ -42,11 +42,11 @@ export function DMList(props: Props) {
 
       <div>
         <div className="flex items-center justify-between px-3">
-          <span className="hover:text-sidebar-2-fg transition duration-300 font-medium">
+          <span className="hover:text-fg transition duration-300 font-medium">
             Direct Messages
           </span>
           <TooltipWrapper text="Create DM">
-            <Plus className="hover:text-sidebar-2-fg transition duration-300 w-5 h-5 relative top-[2px]" />
+            <Plus className="hover:text-fg transition duration-300 w-5 h-5 relative top-[2px]" />
           </TooltipWrapper>
         </div>
 
@@ -57,10 +57,10 @@ export function DMList(props: Props) {
                 <Link
                   href={`/social/dm/${user.id}`}
                   className={twMerge(
-                    'flex items-center justify-between px-3 rounded-md hover:text-sidebar-2-fg transition duration-300 hover:bg-sidebar-2-hover/40 py-2',
+                    'flex items-center justify-between px-3 rounded-md hover:text-brand-fg transition duration-300 hover:bg-brand/20 py-2',
                     clsx(
                       router.asPath === `/social/dm/${user.id}` &&
-                        'bg-sidebar-2-hover/60 text-sidebar-2-fg'
+                        'bg-brand/20 text-brand-fg'
                     )
                   )}
                   key={user.id}

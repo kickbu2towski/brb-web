@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 import clsx from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { tabs } from '@/lib/constants'
+import { Button } from '@/components/ui/button'
 
 type TabItemProps = {
   setSelectedTab: Dispatch<SetStateAction<string>>
@@ -12,17 +13,21 @@ type TabItemProps = {
 export function TabItem(props: TabItemProps) {
   const { selectedTab, setSelectedTab, tab } = props
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={() => setSelectedTab(tab)}
       className={twMerge(
-        'font-medium text-sidebar-2-muted px-4 py-1 rounded-sm hover:text-fg transition duration-300 capitalize',
+        'text-muted py-[6px] px-4 h-auto w-auto',
         clsx(
-          tab === selectedTab && 'bg-sidebar-2-hover/60 text-sidebar-2-fg',
+          tab === selectedTab && 'bg-brand/20 text-brand-fg',
           tab === tabs[3] && 'hidden md:block'
         )
       )}
     >
       {tab}
-    </button>
+    </Button>
   )
 }
+
+
+        // 'font-medium text-muted rounded-sm hover:text-fg transition duration-300 capitalize',

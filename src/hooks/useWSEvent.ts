@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { PublisEvent, Message, User, UserIdentity } from '@/shared.types'
+import { PublisEvent, Message, User, UserIdentity, Room } from '@/shared.types'
 import { mutateUnreadCountAtom } from '@/lib/store'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
+import { removeParticipant, updateParticipants } from '@/lib/utils'
 
 type Data = {
   event: PublisEvent
@@ -18,11 +19,11 @@ export function useWSEvent() {
       return new Promise((resolve) => resolve(data))
     },
     onSuccess(data) {
-      const { name, payload } = data.event
-      switch (name) {
-        case 'PublishEvent': {
+      const { type, payload } = data.event
+      switch (type) {
+        case 'DM': {
           const { dm_id } = payload
-          queryClient.setQueriesData(['messages', dm_id], (data: unknown) => {
+          queryClient.setQueryData(['messages', dm_id], (data: unknown) => {
             let updatedData = [...(data as Message[])]
             const idx = updatedData.findIndex((msg) => msg.id === payload.id)
             if (idx === -1) {
@@ -39,7 +40,7 @@ export function useWSEvent() {
             router.asPath !== `/social/dm/${payload.user.id}`
           ) {
             mutateUnreadCount(payload.user.id, false)
-            queryClient.setQueriesData(['dms'], (data: unknown) => {
+            queryClient.setQueryData(['dms'], (data: unknown) => {
               let users = data as UserIdentity[]
               const exist =
                 users.findIndex((user) => user.id === payload.user.id) !== -1
@@ -49,6 +50,63 @@ export function useWSEvent() {
               return users
             })
           }
+          break
+        }
+        case 'RoomStarted': {
+          queryClient.setQueryData(['rooms'], (data: unknown) => {
+            const updatedRooms = [...(data ?? []) as Room[]]
+            updatedRooms.push(payload)
+            return updatedRooms
+          })
+          break
+        }
+        case 'RoomFinished': {
+          queryClient.setQueryData(['rooms'], (data: unknown) => {
+            const updatedRooms = [...(data ?? []) as Room[]]
+            return updatedRooms.filter(room => room.id !== payload.id)
+          })
+          break
+        }
+        case 'ParticipantJoined': {
+          queryClient.setQueriesData(['rooms'], (data: unknown) => {
+            if(Array.isArray(data)) {
+              const updatedRooms = [...(data ?? []) as Room[]]
+              const idx = updatedRooms.findIndex(room => room.id === payload.roomID)
+              if(idx !== -1) {
+                const room = updateParticipants(updatedRooms[idx], payload.participant)
+                updatedRooms[idx] = room
+              }
+              return updatedRooms
+            }
+
+            if(data && (data as Room).id === payload.roomID) {
+              return updateParticipants((data as Room), payload.participant)
+            }
+
+            return data
+          })
+          break
+        }
+        case 'ParticipantLeft': {
+          queryClient.setQueriesData(['rooms'], (data: unknown) => {
+            if(Array.isArray(data)) {
+              const updatedRooms = [...(data ?? []) as Room[]]
+              const idx = updatedRooms.findIndex(room => room.id === payload.roomID)
+              if(idx !== -1) {
+                const pID = parseInt(payload.participantID)
+                const room = removeParticipant(updatedRooms[idx], pID)
+                updatedRooms[idx] = room
+              }
+              return updatedRooms
+            }
+
+            if(data && (data as Room).id === payload.roomID) {
+              const pID = parseInt(payload.participantID)
+              return removeParticipant((data as Room), pID)
+            }
+
+            return data
+          })
           break
         }
       }

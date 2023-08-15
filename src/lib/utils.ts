@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { API_URL } from './config'
+import { Room, UserIdentity } from '@/shared.types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -17,7 +18,12 @@ export async function fetchWrapper(
   })
 
   if (!res.ok) {
-    throw new Error('failed to fetch')
+    if(res.headers.get('Content-Type') === 'application/json') {
+      const { error } = await res.json()
+      throw new Error(JSON.stringify(error))
+    } else {
+      throw new Error("failed to fetch")
+    }
   }
 
   return res.json()
@@ -37,4 +43,22 @@ export function preventDefault(path: EventTarget[]) {
         el.className === 'icon delete flex')
   )
   return elements.length !== 0
+}
+
+export function updateParticipants(room: Room, participant: UserIdentity) {
+  const updatedRoom = { ...room }
+  const participants = [...updatedRoom.participants]
+  const idx = participants.findIndex(p => p.id === participant.id)
+  if(idx === -1) {
+    participants.push(participant)
+  }
+  updatedRoom.participants = participants
+  return updatedRoom
+}
+
+export function removeParticipant(room: Room, participantID: number) {
+  const updatedRoom = { ...room }
+  const participants = [...updatedRoom.participants]
+  updatedRoom.participants = participants.filter(p => p.id !== participantID)
+  return updatedRoom
 }

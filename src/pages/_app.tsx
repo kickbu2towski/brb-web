@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { useState, ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
+import { Toaster } from "@/components/ui/toaster"
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>
         <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+        <Toaster />
       </JotaiProvider>
     </QueryClientProvider>
   )

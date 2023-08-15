@@ -9,8 +9,6 @@ import { init } from 'emoji-mart'
 import { twMerge } from 'tailwind-merge'
 import { totalUnreadCountAtom } from '@/lib/store'
 import { useAtom } from 'jotai'
-import { useRouter } from 'next/router'
-import clsx from 'clsx'
 
 const links = [
   { icon: Home, text: 'Rooms', href: '/' },
@@ -27,7 +25,6 @@ export function Sidebar(props: Props) {
   const { isSuccess: emojiFetched, data: emojiData } = useEmoji()
   const { data, isSuccess } = useMe()
   const { refetch } = useRedirectURL()
-  const { asPath } = useRouter()
 
   if (emojiFetched) {
     init({ data: emojiData })
@@ -36,7 +33,7 @@ export function Sidebar(props: Props) {
   return (
     <div
       className={twMerge(
-        'bg-sidebar px-3 pt-8 pb-4 flex flex-col gap-6',
+        'px-3 pt-8 pb-4 flex flex-col gap-6 bg-bg-2',
         className
       )}
     >
@@ -46,9 +43,8 @@ export function Sidebar(props: Props) {
           <TooltipWrapper text={link.text} key={link.href}>
             <Link
               href={link.href}
-              className={twMerge("h-[48px] w-[48px] rounded-full bg-bg hover:bg-brand hover:text-fg transition flex items-center justify-center relative", clsx(link.href === "/" ? asPath === link.href : asPath.startsWith(link.href) && "bg-brand text-fg"))}
+              className={twMerge("h-[48px] w-[48px] rounded-full border border-border hover:bg-brand transition ring-offset-bg-2 flex items-center justify-center relative")}
             >
-              {}
               <Icon className="w-[22px] h-[22px]" />
               {link.text === 'Social' && unreadCount ? (
                 <span className="h-5 w-5 rounded-full bg-red-500 text-white absolute bottom-0 right-0 flex items-center justify-center text-xs">
@@ -61,12 +57,12 @@ export function Sidebar(props: Props) {
       })}
 
       {isSuccess && data ? (
-        <div className="mt-auto hover:border-2 transition duration-300 hover:border-bg rounded-full h-[54px] w-[54px] flex items-center justify-center">
+        <div className="mt-auto hover:border-2 rounded-full h-[54px] w-[54px] flex items-center justify-center">
           <LoggedInUser user={data} />
         </div>
       ) : (
         <TooltipWrapper text="Log In">
-          <button className="h-[48px] w-[48px] rounded-full flex items-center justify-center mt-auto bg-bg hover:bg-brand rounded-full">
+          <button className="h-[48px] w-[48px] rounded-full flex items-center justify-center mt-auto ring-offset-bg-2 link hover:bg-brand rounded-full border border-border">
             <AlertDialogWrapper
               title="Login using Google"
               description="Time for a detour to Google. Don't worry, we'll bounce back after login!"

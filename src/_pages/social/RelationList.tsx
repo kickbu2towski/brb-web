@@ -36,15 +36,15 @@ export function RelationList(props: { relation: Relation }) {
                   {relation === 'friends' && (
                     <Link
                       href={`/social/dm/${user.id}`}
-                      className="relative top-[7px] text-muted bg-bg shadow-sm p-2 rounded-full flex items-center justify-center hover:text-fg"
+                      className="relative top-[8px] text-muted bg-bg-2 shadow-sm p-2 rounded-full flex items-center justify-center hover:text-fg"
                     >
                       {' '}
-                      <MailOpen size={15} />{' '}
+                      <MailOpen size={14} />{' '}
                     </Link>
                   )}
                   <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <MoreVertical className="text-muted h-5 w-5 relative top-2" />
+                    <DropdownMenuTrigger className="link relative top-2">
+                      <MoreVertical size={20} className="text-muted" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       side="left"

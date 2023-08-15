@@ -74,7 +74,7 @@ const DM: NextPageWithLayout = () => {
 
   return (
     <div className="h-full grid grid-cols-1 grid-rows-[auto_1fr] overflow-auto">
-      <div className="p-4 shadow-md">
+      <div className="p-4 shadow-depth-1">
         <div className="flex gap-4 items-center">
           <NavigationDrawer />
           <AvatarWrapper
@@ -93,7 +93,6 @@ const DM: NextPageWithLayout = () => {
             const replyToMessage = messages.find(
               (m) => m.id === message.reply_to_id
             )
-
             return (
               <MessageWrapper
                 sender={me}
@@ -114,7 +113,7 @@ const DM: NextPageWithLayout = () => {
 
         <div className="p-4">
           {replyTo && (
-            <div className="bg-bg-alt rounded-t-md p-2 flex items-center justify-between">
+            <div className="bg-bg-2/20 rounded-t-md p-2 flex items-center justify-between">
               <p className="text-sm text-muted">
                 Replying to{' '}
                 <span className="text-brand font-medium">
@@ -128,12 +127,12 @@ const DM: NextPageWithLayout = () => {
           )}
           <div
             className={twMerge(
-              'flex bg-input rounded-md shadow-sm',
+              'flex rounded-md border border-border/60',
               clsx(Boolean(replyTo.length) && 'rounded-t-none')
             )}
           >
             <Input
-              className="py-6 flex-1 bg-transparent"
+              className="py-6 flex-1 border-none without-ring"
               placeholder="Hey there!"
               ref={inputRef}
               onKeyUp={(e) => {
@@ -178,7 +177,7 @@ const DM: NextPageWithLayout = () => {
               }}
             />
             <Popover onOpenChange={setEmojiOpen} open={emojiOpen}>
-              <PopoverTrigger className="text-muted pr-3">
+              <PopoverTrigger className="text-muted px-3 link">
                 <SmilePlus />
               </PopoverTrigger>
               <PopoverContent className="px-0 py-2" align="end" side="top">

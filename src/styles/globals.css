@@ -4,44 +4,21 @@
 
 @layer base {
   .dark {
-    --sidebar: 225 6% 13%;
-
-    --sidebar-2: 220 7% 18%;
-    --sidebar-2-fg: 0 0% 100%;
-    --sidebar-2-muted: 214 8% 61%;
-    --sidebar-2-hover: 228 6% 33%;
-
-    --bg: 223 7% 21%;
-    --bg-alt: 220 7% 17%;
-    --fg: 210 9% 87%;
-    --muted: 214 8% 61%;
-
-    --card: 222 6.67% 20.59%;
-    --card-fg: 222 13.04% 95.49%;
-
-    --tooltip: 225 8% 10%;
-    --tooltip-fg: 210 3% 87%;
-
-    --popover: 220 8% 7%;
-    --popover-fg: 215 9% 73%;
-
-    --brand: 234.94 85.56% 64.71%;
-    --brand-fg: 0 0% 100%;
-
-    --primary: 235 86% 65%;
-    --primary-fg: 0 0% 100%;
-
-    --secondary: 217 8% 34%;
-    --secondary-fg: 0 0% 100%;
-
+    --bg: 213 10% 18%;
+    --bg-2: 214 13% 11%;
+    --bg-3: 213 9% 25%;
+    --fg: 210 50% 99%;
+    --muted: 203 7% 52%;
+    --border: 213 9% 25%;
+    --brand: 255 100% 73%;
+    --brand-fg: 210 50% 99%;
     --radius: 0.5rem;
-    --border: 228 6% 33%;
-    --ring: 213.25 73.71% 41.76%;
-    --input: 225 7% 24%;
+    --ring: 267 100% 77%;
+    --gradient: linear-gradient(180deg, #9A77FF 0%, #735FFA 100%);
   }
 
   em-emoji-picker {
-    --rgb-background: 16, 17, 19;
+    --rgb-background: 24, 28, 32;
     --sidebar-width: 14px;
     --rgb-color: 221, 222, 223;
     --rgb-accent: 85, 101, 241;
@@ -64,7 +41,7 @@
   }
 
   .ram {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--ram-min-width, 280px), 1fr));
   }
 
   ::-webkit-scrollbar {
@@ -76,7 +53,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-popover/50 rounded-full;
+    @apply bg-bg-2/50 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -86,6 +63,14 @@
 
   .v-kb {
     grid-template-rows: 1fr auto env(keyboard-inset-height, 0);
+  }
+
+  a, .link {
+    @apply ring-offset-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  .without-ring {
+    @apply focus-visible:ring-offset-0 focus-visible:ring-0;
   }
 
   @media only screen and (max-width: 441px) {

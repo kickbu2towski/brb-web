@@ -25,9 +25,9 @@ export function SearchUser(props: Props) {
             Search Users
           </Label>
           <Input
+            className="border border-border"
             id="search-users"
             placeholder="Mad Max"
-            autoComplete="off"
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>

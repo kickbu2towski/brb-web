@@ -57,7 +57,7 @@ export const MessageItem = forwardRef<
       className={twMerge(
         'flex items-start px-4 py-3 gap-4 overflow-x-hidden',
         clsx(
-          isEditing && 'bg-bg-alt/50 pb-0',
+          isEditing && 'bg-bg-2/50 pb-0',
           (isReplying || isHighlighted) && 'bg-brand/10',
           replyToMessage?.id && 'items-center'
         )
@@ -82,7 +82,7 @@ export const MessageItem = forwardRef<
                 e.stopPropagation()
                 scrollToMessage(replyToMessage.id)
               }}
-              className="text-muted hover:text-fg truncate"
+              className="text-muted hover:text-fg truncate link"
             >
               {replyToMessage.content}
             </button>
@@ -114,17 +114,17 @@ export const MessageItem = forwardRef<
                 }
               }}
             />
-            <p className="text-sm text-muted">
+            <p className="text-sm text-muted py-2">
               escape to{' '}
               <Button
                 onClick={() => setEditing('')}
-                className="p-0"
+                className="p-0 w-auto h-auto hx"
                 variant="link"
               >
                 cancel
               </Button>{' '}
               • enter to{' '}
-              <Button className="p-0" variant="link" onClick={handleEdit}>
+              <Button className="p-0 w-auto h-auto" variant="link" onClick={handleEdit}>
                 save
               </Button>
             </p>

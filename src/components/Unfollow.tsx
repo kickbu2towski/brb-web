@@ -33,8 +33,9 @@ export function Unfollow(props: Props) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="hover:bg-bg hover:text-fg ring-offset-bg-2">Cancel</AlertDialogCancel>
           <AlertDialogAction
+            className="ring-offset-bg-2"
             onClick={() => {
               unfollowUser.mutate({ userID, queryKey })
             }}

@@ -7,7 +7,6 @@ import {
 import { User } from '@/shared.types'
 import { LogOut, UserCog } from 'lucide-react'
 import { AlertDialogWrapper } from './AlertDialogWrapper'
-import { useState } from 'react'
 import { useLogout } from '@/hooks'
 import { AvatarWrapper } from './AvatarWrapper'
 
@@ -22,7 +21,7 @@ export function LoggedInUser(props: Props) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger className='link'>
           <AvatarWrapper alt={user.username} src={user.avatar} />
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="mb-12 px-3 py-4 space-y-2">

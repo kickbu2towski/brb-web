@@ -118,7 +118,7 @@ export function MessageWrapper(props: Props) {
           </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-bg/80" />
-            <Drawer.Content className="bg-popover text-popover-fg flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
+            <Drawer.Content className="bg-bg-2 text-muted flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
               <div className="px-2 py-4 bg-popover rounded-t-[10px] flex-1">
                 <div className="mx-auto w-12 h-1.5 flex-shrink-0 bg-bg rounded-full mb-3" />
                 <div className="flex flex-col gap-2">
@@ -177,12 +177,13 @@ export function MessageWrapper(props: Props) {
         <Drawer.Root open={emojiOpen} onOpenChange={setEmojiOpen}>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-bg/80" />
-            <Drawer.Content className="bg-popover text-popover-fg flex flex-col rounded-t-[10px] mt-24 fixed min-h-[30%] bottom-0 left-0 right-0">
+            <Drawer.Content className="bg-bg-2 text-muted flex flex-col rounded-t-[10px] mt-24 fixed min-h-[30%] bottom-0 left-0 right-0" onClick={() => console.log("clicked")}>
               <div className="py-4 bg-popover rounded-t-[10px] flex-1">
                 <div className="mx-auto w-12 h-1.5 flex-shrink-0 bg-bg rounded-full mb-3" />
                 <EmojiPicker
                   dynamicWidth
-                  onSelect={(emoji) => handleReaction(emoji)}
+                  // this on select not firing
+                  onSelect={(emoji) => { console.log(emoji) }}
                 />
               </div>
             </Drawer.Content>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { AvatarWrapper } from '@/components/AvatarWrapper'
 import { Unfollow } from '@/components/Unfollow'
-import { MailOpen } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import Link from 'next/link'
 
 type Props = {
@@ -17,7 +17,7 @@ export function UserCard(props: Props) {
 
   return (
     <Card
-      className="py-4 flex flex-col gap-6 text-sidebar-2-fg hover:-translate-y-1 hover:shadow-lg transition duration-200 relative px-4"
+      className="py-4 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-depth-2 transition duration-200 relative px-4 border-none bg-bg-3"
       key={user.id}
     >
       <div className="flex justify-center gap-3 flex-col">
@@ -27,13 +27,13 @@ export function UserCard(props: Props) {
           alt={user.username}
         />
         <div className="flex items-center gap-3">
-          <p className="text-xl">{user.username}</p>
+          <p>{user.username}</p>
           {user.is_friend && (
             <Link
               href={`/social/dm/${user.id}`}
-              className="text-muted bg-bg-alt p-2 rounded-full flex items-center justify-center hover:text-fg"
+              className="text-muted bg-bg-2/50 p-2 rounded-full flex items-center justify-center hover:text-fg hover:bg-bg-2"
             >
-              <MailOpen size={16} />
+              <Mail size={16} />
             </Link>
           )}
         </div>
@@ -52,7 +52,7 @@ export function UserCard(props: Props) {
           <p className="text-muted">Following</p>
         </div>
       </div>
-      <div className="absolute right-4 top-4 ">
+      <div className="absolute right-4 top-4">
         {user.is_following ? (
           <Unfollow userID={user.id} queryKey={['searchUsers', username]}>
             <Button variant="secondary" size="sm" className="px-4 text-sm">
