@@ -1,6 +1,6 @@
 import { AvatarWrapper } from '@/components/AvatarWrapper'
 import { Input } from '@/components/ui/input'
-import { useRoom, useRoomToken, useUpdateRoom } from '@/hooks'
+import { useMe, useRoom, useRoomToken, useUpdateRoom } from '@/hooks'
 import { LIVEKIT_URL } from '@/lib/config'
 import { DataPacket_Kind, Room as LKRoom, RoomEvent } from 'livekit-client'
 import {
@@ -64,19 +64,19 @@ const roomTabs = [
 export default function Room() {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const { data: me } = useMe()
   const roomID =
     typeof router.query.roomID === 'string' ? router.query.roomID : undefined
   const {
     data: token,
     isSuccess,
     error: tokenError,
-  } = useRoomToken(roomID as string)
+  } = useRoomToken(roomID as string, Boolean(me?.id) && typeof roomID === "string")
   const { data: room, isSuccess: isRoomSucces } = useRoom(
     roomID as string,
     isSuccess && Boolean(roomID)
   )
   const roomRef = useRef<LKRoom>()
-  const me = queryClient.getQueryData(['me']) as User
   const inputRef = useRef<HTMLInputElement>(null)
   const [messages, setMessages] = useState<RoomMessageOrLogPayload[]>([])
   const { mutate: updateRoomMutate } = useUpdateRoom()
@@ -734,12 +734,12 @@ export default function Room() {
         )}
       </div>
 
-      {roomID ? (
+      {roomID ?  (
         <Dialog open={Boolean(open)} onOpenChange={(open) => setOpen(open ? -1 : 0)}>
           <DialogContent className="p-4 py-6">
             <KickParticipant
               kicked={open}
-              kicked_by={me.id}
+              kicked_by={me?.id}
               close={(kick) => {
                 if (kick) {
                   publishData({ type: "MessageOrLog", payload: { kind: "Kick", payload: kick } })

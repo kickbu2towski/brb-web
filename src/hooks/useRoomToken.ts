@@ -8,11 +8,11 @@ async function fetchRoomToken(roomID: string): Promise<string> {
   return data.token
 }
 
-export function useRoomToken(roomID: string) {
+export function useRoomToken(roomID: string, enabled: boolean) {
   return useQuery({
     queryKey: ['room', 'token', roomID],
     queryFn: () => fetchRoomToken(roomID),
-    enabled: roomID !== undefined,
+    enabled,
     staleTime: 0,
   })
 }
