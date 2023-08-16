@@ -15,7 +15,7 @@ import {
   Skull,
 } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Room,
   RoomMessageOrLogPayload,
@@ -30,7 +30,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { format } from 'date-fns'
-import { User } from '@/shared.types'
 import { useQueryClient } from '@tanstack/react-query'
 import { RoomTabItem } from '@/_pages/room/[userID]'
 import {
@@ -45,7 +44,7 @@ import { statuses } from '@/lib/constants'
 import { Separator } from '@/components/ui/separator'
 import { KickParticipant, UpdateWelcomeMessage } from '@/_pages/home'
 import { useToast } from '@/components/ui/use-toast'
-import { Dialog, DialogContent} from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 const encoder = new TextEncoder()
 const decoder = new TextDecoder()
@@ -64,17 +63,20 @@ const roomTabs = [
 export default function Room() {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const { data: me } = useMe()
+  const { data: me, isSuccess: isMeSuccess } = useMe()
   const roomID =
-    typeof router.query.roomID === 'string' ? router.query.roomID : undefined
+    typeof router.query.roomID === 'string' ? router.query.roomID : undefined ?? ""
   const {
     data: token,
-    isSuccess,
+    isSuccess: isTokenSuccess,
     error: tokenError,
-  } = useRoomToken(roomID as string, Boolean(me?.id) && typeof roomID === "string")
+  } = useRoomToken(
+    roomID as string,
+    Boolean(me?.id) && typeof roomID === 'string'
+  )
   const { data: room, isSuccess: isRoomSucces } = useRoom(
     roomID as string,
-    isSuccess && Boolean(roomID)
+    isMeSuccess && Boolean(roomID)
   )
   const roomRef = useRef<LKRoom>()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -103,7 +105,7 @@ export default function Room() {
     }
   }
 
-  function setOrUnsetCoOwner(roomID: string, coIdx: number, p: UserIdentity) {
+  function setOrUnsetCoOwner(roomID: string, coIdx: number, p: UserIdentity, owner: UserIdentity) {
     updateRoomMutate(
       { roomID, coOwner: p },
       {
@@ -113,11 +115,7 @@ export default function Room() {
             payload: {
               kind: coIdx === -1 ? 'SetCoOwner' : 'UnsetCoOwner',
               payload: {
-                owner: {
-                  id: me.id,
-                  username: me.username,
-                  avatar: me.avatar,
-                },
+                owner,
                 co_owner: p,
               },
             },
@@ -160,7 +158,7 @@ export default function Room() {
     )
   }
 
-  function updateParticipantStatus(participantID: number, status: string) {
+  const updateParticipantStatus = useCallback((participantID: number, status: string) =>{
     queryClient.setQueryData(['rooms', roomID], (data: unknown) => {
       const updatedRoom = { ...(data as Room) }
       updatedRoom.participants = updatedRoom.participants.map((p) =>
@@ -168,10 +166,10 @@ export default function Room() {
       )
       return updatedRoom
     })
-  }
+  }, [roomID, queryClient])
 
   useEffect(() => {
-    if (isSuccess && LIVEKIT_URL) {
+    if (isMeSuccess && isTokenSuccess && isRoomSucces && LIVEKIT_URL) {
       roomRef.current = new LKRoom()
       roomRef.current
         .connect(LIVEKIT_URL, token)
@@ -203,7 +201,10 @@ export default function Room() {
                 if (event.type === 'MessageOrLog') {
                   const { payload: message } = event
 
-                  if (message.kind === 'Kick' && me.id === message.payload.kicked) {
+                  if (
+                    message.kind === 'Kick' &&
+                    me.id === message.payload.kicked
+                  ) {
                     router.push(`/room/${roomID}/kick`)
                     return
                   }
@@ -265,7 +266,7 @@ export default function Room() {
           console.error('failed to connect to room:', err)
         })
     }
-  }, [token])
+  }, [token, isMeSuccess, isRoomSucces, isTokenSuccess, router, queryClient, roomID, me?.id, updateParticipantStatus])
 
   useEffect(() => {
     return () => {
@@ -294,6 +295,10 @@ export default function Room() {
         </div>
       </div>
     )
+  }
+
+  if(!isMeSuccess || !isRoomSucces || !isTokenSuccess) {
+    return null
   }
 
   return (
@@ -328,95 +333,93 @@ export default function Room() {
           </div>
         )}
 
-        {isRoomSucces && roomID && (
-          <div className="flex gap-x-4 px-4 justify-center">
-            {room.participants.map((p) => {
-              const isMe = p.id === me.id
-              const isOwner = p.id === room.owner.id
-              const coIdx = room.co_owners.findIndex((co) => co.id === p.id)
-              const isCoOwner = coIdx !== -1
-              return (
-                <div
-                  key={p.id}
-                  style={{ backgroundImage: `url(${p.avatar})` }}
-                  className="h-24 w-24 rounded-sm relative link"
-                >
-                  {(isOwner || isCoOwner || p.status) && (
-                    <div
-                      className="rounded-tr-xl font-semibold p-1 inline-block px-3 text-[10px] text-brand-fg absolute left-0 bottom-0"
-                      style={{
-                        backgroundImage: 'var(--gradient)',
-                        opacity: 0.9,
-                      }}
+        <div className="flex gap-x-4 px-4 justify-center">
+          {room.participants.map((p) => {
+            const isMe = p.id === me.id
+            const isOwner = p.id === room.owner.id
+            const coIdx = room.co_owners.findIndex((co) => co.id === p.id)
+            const isCoOwner = coIdx !== -1
+            return (
+              <div
+                key={p.id}
+                style={{ backgroundImage: `url(${p.avatar})` }}
+                className="h-24 w-24 rounded-sm relative link"
+              >
+                {(isOwner || isCoOwner || p.status) && (
+                  <div
+                    className="rounded-tr-xl font-semibold p-1 inline-block px-3 text-[10px] text-brand-fg absolute left-0 bottom-0"
+                    style={{
+                      backgroundImage: 'var(--gradient)',
+                      opacity: 0.9,
+                    }}
+                  >
+                    {p.status ? <p>{p.status}</p> : null}
+                    {(isOwner || isCoOwner) && p.status && (
+                      <Separator className="my-[2px]" />
+                    )}
+                    {p.id === room.owner.id && <p>Owner</p>}
+                    {coIdx !== -1 && <p>Co-Owner</p>}
+                  </div>
+                )}
+                {!isMe && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className="absolute right-0 top-0 p-1 rounded-bl-lg bg-brand/70 link"
+                      role="button"
                     >
-                      {p.status ? <p>{p.status}</p> : null}
-                      {(isOwner || isCoOwner) && p.status && (
-                        <Separator className="my-[2px]" />
-                      )}
-                      {p.id === room.owner.id && <p>Owner</p>}
-                      {coIdx !== -1 && <p>Co-Owner</p>}
-                    </div>
-                  )}
-                  {!isMe && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger
-                        className="absolute right-0 top-0 p-1 rounded-bl-lg bg-brand/70 link"
-                        role="button"
-                      >
-                        <Settings size={12} />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        onCloseAutoFocus={(e) => {
-                          e.preventDefault()
-                          if (inputRef.current && isPM) {
-                            inputRef.current.focus()
-                          }
-                        }}
-                        side="top"
-                        className="mb-1 px-3 py-4 space-y-2 shadow-depth-4 border border-border"
-                      >
-                        {isMeOwner && (
-                          <DropdownMenuItem
-                            className="px-2"
-                            onClick={() => {
-                              const { sid, status, ...rest } = p
-                              setOrUnsetCoOwner(roomID, coIdx, rest)
-                            }}
-                          >
-                            <Crown className="h-4 w-4 mr-3" />
-                            <span>{isCoOwner ? 'Unset' : 'Set'} Co-Owner</span>
-                          </DropdownMenuItem>
-                        )}
+                      <Settings size={12} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      onCloseAutoFocus={(e) => {
+                        e.preventDefault()
+                        if (inputRef.current && isPM) {
+                          inputRef.current.focus()
+                        }
+                      }}
+                      side="top"
+                      className="mb-1 px-3 py-4 space-y-2 shadow-depth-4 border border-border"
+                    >
+                      {isMeOwner && (
                         <DropdownMenuItem
+                          className="px-2"
                           onClick={() => {
-                            if (inputRef.current) {
-                              setIsPM(p)
-                            }
+                            const { sid, status, ...rest } = p
+                            setOrUnsetCoOwner(roomID, coIdx, rest, me)
                           }}
                         >
-                          <Mail className="h-4 w-4 mr-3" />
-                          <span>PM</span>
+                          <Crown className="h-4 w-4 mr-3" />
+                          <span>{isCoOwner ? 'Unset' : 'Set'} Co-Owner</span>
                         </DropdownMenuItem>
-                        {(isMeOwner || isMeCoOwner) && !isOwner ? (
-                          <>
-                            <DropdownMenuItem onClick={() => clearChat(me, p)}>
-                              <Trash className="h-4 w-4 mr-3" />
-                              <span>Clear Chat</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setOpen(p.id)}>
-                              <Skull className="h-4 w-4 mr-3" />
-                              <span>Kick</span>
-                            </DropdownMenuItem>
-                          </>
-                        ) : null}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )}
+                      )}
+                      <DropdownMenuItem
+                        onClick={() => {
+                          if (inputRef.current) {
+                            setIsPM(p)
+                          }
+                        }}
+                      >
+                        <Mail className="h-4 w-4 mr-3" />
+                        <span>PM</span>
+                      </DropdownMenuItem>
+                      {(isMeOwner || isMeCoOwner) && !isOwner ? (
+                        <>
+                          <DropdownMenuItem onClick={() => clearChat(me, p)}>
+                            <Trash className="h-4 w-4 mr-3" />
+                            <span>Clear Chat</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setOpen(p.id)}>
+                            <Skull className="h-4 w-4 mr-3" />
+                            <span>Kick</span>
+                          </DropdownMenuItem>
+                        </>
+                      ) : null}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+            )
+          })}
+        </div>
         <div></div>
       </div>
 
@@ -734,27 +737,31 @@ export default function Room() {
         )}
       </div>
 
-      {roomID ?  (
-        <Dialog open={Boolean(open)} onOpenChange={(open) => setOpen(open ? -1 : 0)}>
-          <DialogContent className="p-4 py-6">
-            <KickParticipant
-              kicked={open}
-              kicked_by={me?.id}
-              close={(kick) => {
-                if (kick) {
-                  publishData({ type: "MessageOrLog", payload: { kind: "Kick", payload: kick } })
-                  setMessages((prev) => [
-                    ...prev,
-                    { kind: 'Kick', payload: kick },
-                  ])
-                  setOpen(0)
-                }
-              }}
-              roomID={roomID}
-            />
-          </DialogContent>
-        </Dialog>
-      ) : null}
+      <Dialog
+        open={Boolean(open)}
+        onOpenChange={(open) => setOpen(open ? -1 : 0)}
+      >
+        <DialogContent className="p-4 py-6">
+          <KickParticipant
+            kicked={open}
+            kicked_by={me.id}
+            close={(kick) => {
+              if (kick) {
+                publishData({
+                  type: 'MessageOrLog',
+                  payload: { kind: 'Kick', payload: kick },
+                })
+                setMessages((prev) => [
+                  ...prev,
+                  { kind: 'Kick', payload: kick },
+                ])
+                setOpen(0)
+              }
+            }}
+            roomID={roomID}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -12,7 +12,7 @@ export default function Kick() {
     queryClient.setQueryData(['room', roomID, null], () => {
       return { token: null }
     })
-  }, [])
+  }, [queryClient, roomID])
 
   return null
 }
